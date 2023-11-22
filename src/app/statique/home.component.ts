@@ -22,8 +22,7 @@ ngOnInit():void{
   this.service.getAdmin().subscribe(admin=>
   {this.totaladmin=admin.length})
 
-  this.service.getClient().subscribe(client=>
-    {this.totalclient=client.length})
+
 
     this.service.getProduit().subscribe(produit=>
       {this.totalproduit=produit.length})

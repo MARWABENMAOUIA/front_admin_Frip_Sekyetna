@@ -1,111 +1,124 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgToastService } from 'ng-angular-popup';
 import { CrudService } from '../service/crud.service';
 import { Produit } from '../model/Produit.model';
 
 @Component({
   selector: 'app-ajouterproduit',
   templateUrl: './ajouterproduit.component.html',
-  styleUrls: ['./ajouterproduit.component.css']
+  styleUrls: ['./ajouterproduit.component.css'],
 })
 export class AjouterproduitComponent {
-  userFile:any
-  imagePath:any
-  imgURL:any
-  message:any
-  ProduitForm:FormGroup
-  constructor(private service :CrudService,private router:Router,private fb:FormBuilder,private toast:NgToastService) {
+  ProduitForm: FormGroup;
+  imgURLs: string[] = []; // Declare imgURLs
+  userFiles: FileList; // Declare userFiles
+  message: string;
+  messageproduit=""
+
+  constructor(
+    private service: CrudService,
+    private router: Router,
+    private fb: FormBuilder,
+  ) {
     let formControls = {
-      img: new FormControl('',[
-        Validators.required,]),
-      nom: new FormControl('',[
-        Validators.required,]),
-     
-      prix: new FormControl('',[
-        Validators.required,
-      ]),
-        descript: new FormControl('',[
-        Validators.required,]),
-        quantite: new FormControl('',[
-        Validators.required,]),
-      }
-     this.ProduitForm = this.fb.group(formControls)
-   }
-   get img() {return this.ProduitForm.get('img');} 
-  get nom() { return this.ProduitForm.get('nom');}
-  get prix() { return this.ProduitForm.get('prix');}
-  get descript() {return this.ProduitForm.get('descript');}
-  get quantite() {return this.ProduitForm.get('quantite');}
-  
-   addNewProduit() {
+      images: new FormControl('', [Validators.required]),
+      nom: new FormControl('', [Validators.required]),
+      prix: new FormControl('', [Validators.required]),
+      descript: new FormControl('', [Validators.required]),
+    };
+    this.ProduitForm = this.fb.group(formControls);
+  }
+
+  get images() {
+    return this.ProduitForm.get('images');
+  }
+  get nom() {
+    return this.ProduitForm.get('nom');
+  }
+  get prix() {
+    return this.ProduitForm.get('prix');
+  }
+  get descript() {
+    return this.ProduitForm.get('descript');
+  }
+
+  addNewProduit() {
     let data = this.ProduitForm.value;
-    console.log(data);
     let produit = new Produit(
-     undefined, this.imgURL,data.nom,data.prix,data.descript,data.quantite);
-    console.log(produit);
-    
+      undefined ,
+      this.imgURLs,
+      data.nom,
+      data.prix,
+      data.descript,
+    );
+    console.log('Produit with Images:', produit);
+
     if (
-      this.imgURL == 0 ||
-      data.nom == 0||
-      data.prix == 0 ||
-      data.descript == 0 ||
-      data.quantite == 0 
-  
+      data.images === '' ||
+      data.nom === '' ||
+      data.prix === '' ||
+      data.descript === '' ||
+      data.quantite === ''
     ) {
-      this.toast.info({
-        detail: 'Error Message',
-        summary: 'Remplir votre champs',
-      });
+      this.messageproduit = '<div class="alert alert-primary" role="alert">Remplir tous les champs</div>';
     } else {
-    this.service.addproduit(produit).subscribe(   // yetzed  ladmin lil base de donnée
-      res=>{
-        console.log(res);
-        this.toast.success({
-          detail: 'Succes Message',
-          summary: 'Message est Envoyée',
-        });
-        
-      //this.router.navigate(['/listAdmin']);
-      },
-      err=>{
-        console.log(err);
-        this.toast.error({
-          detail: 'Error Message',
-          summary: 'Probléme de Serveur',
-        }); }
-    )
-  
+      this.service.addProduit(produit).subscribe(
+        (result) => {
+          this.messageproduit = '<div class="alert alert-success" role="alert">Product added successfully</div>';
+          console.log('Product added successfully:', result);
+        },
+        (error) => {
+          this.messageproduit = '<div class="alert alert-danger" role="alert">Error adding Product</div>';
+          console.error('Error adding product:', error);
+        }
+      );
     }
   }
+  onSelectFiles(event: any) {
+    if (event.target.files.length > 0) {
+      const files = event.target.files;
+      this.userFiles = files;
   
+      const loadImagePromises: Promise<string>[] = [];
   
-    ngOnInit(): void {
-    }
-    onSelectFile(event: any) {
-      if (event.target.files.length > 0) {
-        const file = event.target.files[0];
-        this.userFile = file;
-    
-  
-        var mimeType = event.target.files[0].type;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        var mimeType = file.type;
         if (mimeType.match(/image\/*/) == null) {
           this.message = 'Only images are supported.';
           return;
         }
   
-        var reader = new FileReader();
-  
-        this.imagePath = file;
-        reader.readAsDataURL(file);
-        reader.onload = (_event) => {
-          this.imgURL = reader.result;
-        };
+        loadImagePromises.push(this.loadImageAsDataURL(file));
       }
-    }
   
+      Promise.all(loadImagePromises)
+        .then((result) => {
+          console.log('Image URLs:', result);
+          this.imgURLs = result;
+        })
+        .catch((error) => {
+          console.error('Error loading images:', error);
+        });
+    }
   }
   
-
-
+  loadImageAsDataURL(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onload = (event) => {
+        resolve(event.target.result as string);
+      };
+  
+      reader.onerror = (event) => {
+        reject(event.target.error);
+      };
+  
+      reader.readAsDataURL(file);
+    });
+  }
+  
+  
+}

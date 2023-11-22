@@ -104,7 +104,6 @@
 
                             <th>Prix</th>
                             <th>Descriprtion</th>
-                            <th>Quantite</th>
                             <th>Action</th>
                           </tr>
                           <!-- end row -->
@@ -114,13 +113,15 @@
                           <!-- start row -->
                           <tr *ngFor="let Produit of listproduit |paginate:{itemsPerPage:4,currentPage:p}">
                             <td>{{ Produit.id }}</td>
-                            <td><img style="width:95px;height:80px;" [src]="Produit.img" /></td>
+                            <!-- <td><img style="width:95px;height:80px;" [src]="Produit.images" /></td> -->
+                            <div *ngFor="let imageUrl of Produit.images">
+                              <img style="width: 95px; height: 80px;" [src]="imageUrl" />
+                            </div>
                             <td>{{ Produit.nom }}</td>
 
                             <td>{{ Produit.prix }}</td>
 
                             <td>{{ Produit.descript }}</td>
-                            <td>{{ Produit.quantite }}</td>
 
                             <td>
                           

@@ -2,15 +2,17 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Admin } from '../model/Admin.model';
 import { Observable } from 'rxjs';
-import { Client } from '../model/Client.model';
 import { Contact } from '../model/Contact.model';
 import { Produit } from '../model/Produit.model';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Achat } from '../model/Achat.model';
 
 
 const httpOptions={
-  headers:new HttpHeaders({'Content-Type': 'application/json'})
+  headers:new HttpHeaders({
+    'Content-Type': 'application/json'})
 };
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,15 +21,25 @@ const httpOptions={
 export class CrudService {
   helper=new JwtHelperService();
   loginUserUrl="http://localhost:8081/api/admin/login"
-  apiUrl="http://localhost:8081/api"
+  apiUrl="http://localhost:8081/api";
+  apiUrll="http://localhost:8081/api/produit";
+  apiUrlach="http://localhost:8081/api/achat";
 
   constructor( private http:HttpClient) { }
-  addadmin(admin:Admin){ // envoie une requête HTTP POST vers une URL qui se trouve à l'adresse this.apiUrl+"/admin"
-    return this.http.post<any>(this.apiUrl+"/admin", admin,httpOptions);
+  addProduit(produit: Produit): Observable<Produit> {
+
+  
+    return this.http.post<Produit>(`${this.apiUrl}/produit`, produit, httpOptions);
+  }
+  
+
+
+
+
+addadmin(admin:Admin){ // envoie une requête HTTP POST vers une URL qui se trouve à l'adresse this.apiUrl+"/admin"
+  return this.http.post<any>(this.apiUrl+"/admin", admin,httpOptions);
 }
-addproduit(produit:Produit){ // envoie une requête HTTP POST vers une URL qui se trouve à l'adresse this.apiUrl+"/admin"
-  return this.http.post<any>(this.apiUrl+"/produit", produit,httpOptions);
-}
+
 onDeleteAdmin(id : number){
   const url =`${this.apiUrl+"/admin"}/${id}` 
   return this.http.delete(url , httpOptions)
@@ -39,9 +51,7 @@ onDeleteClient(id : number){
   const url =`${this.apiUrl+"/client"}/${id}` 
   return this.http.delete(url , httpOptions)
 }
-getClient(): Observable<Client[]>{
-  return this.http.get<Client[]>(this.apiUrl + "/client");
-}
+
 addContact(contact:Contact){ // envoie une requête HTTP POST vers une URL qui se trouve à l'adresse this.apiUrl+"/admin"
   return this.http.post<any>(this.apiUrl+"/contact", contact,httpOptions);
 }
@@ -98,4 +108,13 @@ onDeleteProduit(id : number){
      return decodeToken.data;
    }
 
+ 
+
+getAllAchats(): Observable<Achat[]> {
+  return this.http.get<Achat[]>(`${this.apiUrlach}/all`);
+}
+supprimerAchat(id: number): Observable<void> {
+  const url = `${this.apiUrlach}/${id}`;
+  return this.http.delete<void>(url);
+}
 }

@@ -34,7 +34,6 @@ export class ModifierAdminComponent {
       email: new FormControl('', [Validators.required]),
       mdp: new FormControl('', [Validators.required]),
 
-      role: new FormControl('', [Validators.required]),
     };
     this.updateForm = this.fb.group(formControls);
   }
@@ -51,10 +50,6 @@ export class ModifierAdminComponent {
     return this.updateForm.get('mdp');
   }
  
-   get role() {
-    return this.updateForm.get('role');
-  }
-
   ngOnInit(): void {
     let idEvent = this.router.snapshot.params['id'];
     this.id = idEvent;
@@ -68,7 +63,6 @@ export class ModifierAdminComponent {
         prenom: event.prenom,
         email: event.email,
         mdp: event.mdp,
-        role: event.role,
       
       });
     });
@@ -84,7 +78,6 @@ export class ModifierAdminComponent {
       data.prenom,
       data.email,
       data.mdp,
-      data.role,
      
     );
     console.log(admin);

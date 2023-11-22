@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AjouteradminComponent } from './ajouteradmin/ajouteradmin.component';
 import { ListadminComponent } from './listadmin/listadmin.component';
-import { ListclientComponent } from './listclient/listclient.component';
 import { ListcontactComponent } from './listcontact/listcontact.component';
 import { ListproduitComponent } from './listproduit/listproduit.component';
 import { AjouterproduitComponent } from './ajouterproduit/ajouterproduit.component';
@@ -11,9 +10,10 @@ import { ModifierProduitComponent } from './modifier-produit/modifier-produit.co
 import { AuthGuard } from './service/auth-guard.service';
 import { ModifierAdminComponent } from './modifier-admin/modifier-admin.component';
 import { HomeComponent } from './statique/home.component';
+import { ListachatComponent } from './listachat/listachat.component';
 
 const routes: Routes = [
-  { path: '', component: AjouteradminComponent, canActivate: [AuthGuard] },
+  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
   {
     path: 'ajouterproduit',
     component: AjouterproduitComponent,
@@ -24,11 +24,8 @@ const routes: Routes = [
     component: ListadminComponent,
     canActivate: [AuthGuard],
   },
-  {
-    path: 'listclient',
-    component: ListclientComponent,
-    canActivate: [AuthGuard],
-  },
+  
+
   {
     path: 'listcontact',
     component: ListcontactComponent,
@@ -37,6 +34,11 @@ const routes: Routes = [
   {
     path: 'listproduit',
     component: ListproduitComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'listachat',
+    component: ListachatComponent,
     canActivate: [AuthGuard],
   },
   {
@@ -50,8 +52,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'home',
-    component: HomeComponent,
+    path: 'ajouteradmin',
+    component: AjouteradminComponent,
     canActivate: [AuthGuard],
   },
 

@@ -15,7 +15,7 @@ export class ListproduitComponent {
   constructor(private service:CrudService,private router:Router) { }
   //supprimer
   DeleteProduit(produit: Produit){
-    if(confirm("Voulez vous supprimer cet produit avec l'ID " + produit.id + " ?")) {
+    if(confirm("Voulez vous supprimer cet produit avec l'ID ?")) {
      
       this.service.onDeleteProduit(produit.id).subscribe(() => {
         this.router.navigate(['/listproduit']).then(() => {
@@ -23,10 +23,13 @@ export class ListproduitComponent {
         })
       })}}
   ngOnInit(): void {
-    this.service.getProduit().subscribe(produit => {
-      this.listproduit = produit
+    this.service.getProduit().subscribe(produits  => {
+      this.listproduit = produits;
+      this.getLatestProducts();
     })
   }
-
-
-}
+  getLatestProducts() {
+    // Triez les produits par ID de manière décroissante
+    this.listproduit.sort((a, b) => b.id - a.id);}
+  }
+  

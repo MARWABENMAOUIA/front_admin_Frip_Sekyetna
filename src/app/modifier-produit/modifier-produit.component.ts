@@ -11,8 +11,12 @@ import { CrudService } from '../service/crud.service';
 })
 export class ModifierProduitComponent {
   updateForm: FormGroup;
+  imgURLs: string[] = []; 
+  userFiles: FileList; // Declare userFiles
+
+
   id: number;
-  currentProduit = new Produit()
+  //currentProduit = new Produit()
   userFile: any;
   public imagePath: any;
   imgURL: any = '';
@@ -26,7 +30,7 @@ export class ModifierProduitComponent {
 
 
     let formControls = {
-      img: new FormControl('',[
+      images: new FormControl('',[
         Validators.required,]),
       nom: new FormControl('',[
         Validators.required,]),
@@ -41,7 +45,7 @@ export class ModifierProduitComponent {
       }
      this.updateForm = this.fb.group(formControls)
    }
-   get img() {return this.updateForm.get('img');} 
+   get images() {return this.updateForm.get('images');} 
   get nom() { return this.updateForm.get('nom');}
   get prix() { return this.updateForm.get('prix');}
   get descript() {return this.updateForm.get('descript');}
@@ -61,8 +65,7 @@ export class ModifierProduitComponent {
         nom: event.nom,
         prix: event.prix,
         descript: event.descript,
-        quantite: event.quantite,
-        img: event.img ,  
+        images: event.images ,  
 
         
       });
@@ -74,11 +77,10 @@ export class ModifierProduitComponent {
 
     let produit = new Produit(
       this.id,
-      this.imgURL,
+      this.imgURLs,
       data.nom,
       data.prix,
       data.descript,
-      data.quantite,
      
     
     );
@@ -95,26 +97,50 @@ export class ModifierProduitComponent {
 
 
   //upload Image
-  onSelectFile(event: any) {
+  onSelectFiles(event: any) {
     if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.userFile = file;
-      // this.f['profile'].setValue(file);
-
-      var mimeType = event.target.files[0].type;
-      if (mimeType.match(/image\/*/) == null) {
-        this.message = 'Only images are supported.';
-        return;
+      const files = event.target.files;
+      this.userFiles = files;
+  
+      const loadImagePromises: Promise<string>[] = [];
+  
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        var mimeType = file.type;
+        if (mimeType.match(/image\/*/) == null) {
+          this.message = 'Only images are supported.';
+          return;
+        }
+  
+        loadImagePromises.push(this.loadImageAsDataURL(file));
       }
-
-      var reader = new FileReader();
-
-      this.imagePath = file;
-      reader.readAsDataURL(file);
-      reader.onload = (_event) => {
-        this.imgURL = reader.result;
-      };
+  
+      Promise.all(loadImagePromises)
+        .then((result) => {
+          console.log('Image URLs:', result);
+          this.imgURLs = result;
+        })
+        .catch((error) => {
+          console.error('Error loading images:', error);
+        });
     }
+  }
+  
+  loadImageAsDataURL(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onload = (event) => {
+        resolve(event.target.result as string);
+      };
+  
+      reader.onerror = (event) => {
+        reject(event.target.error);
+      };
+  
+      reader.readAsDataURL(file);
+    });
+  
   }
 
 }

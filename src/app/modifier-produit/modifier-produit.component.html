@@ -100,14 +100,8 @@
                         >Image</label
                       >
                       <div class="col-sm-9">
-                        <input
-                          accept="image/*" (change)="onSelectFile($event)"
-                          formControlName="img"
-                          type="file"
-                          class="form-control"
-                          id="exampleInputtext"
-                          placeholder="image"
-                        />
+                        <input accept="image/*" (change)="onSelectFiles($event)" formControlName="images" type="file" class="form-control" id="exampleInputtext" placeholder="images" multiple />
+
                       </div>
                     </div>
                     <div class="mb-4 row align-items-center">

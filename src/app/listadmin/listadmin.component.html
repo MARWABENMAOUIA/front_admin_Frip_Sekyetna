@@ -81,7 +81,7 @@
                 <!-- --------------------------------------------------- -->
                 <section>
                     <!-- basic table -->
-                    <a href="" class="btn btn-primary" >Ajouter Administrateur</a>
+                    <a href="/ajouteradmin" class="btn btn-primary" >Ajouter Administrateur</a>
                     <div class="row">
                         <div class="col-12">
                             <!-- ---------------------
@@ -100,7 +100,6 @@
                                                     <th>ID</th>
                                                     <th>Nom</th>
                                                     <th>Prenom</th>
-                                                    <th>Role</th>
                                                     <th>Email</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -112,11 +111,10 @@
                                                     <td>{{Admin.id}}</td>
                                                     <td>{{Admin.nom}}</td>
                                                     <td>{{Admin.prenom}}</td>
-                                                    <td>{{Admin.role}}</td>
                                                     <td>{{Admin.email}}</td>
-                                                    <td *ngIf="role=='superadmin'">
+                                                    <td >
                                                       <a href="/modifieradmin/{{Admin.id}}" type="submit" class="btn btn-success" >  
-                                                        <i class="fas fa-edit" style="color: green;"></i></a>
+                                                        <i class="fas fa-edit" style="color: green;"> </i></a>
                                                         <button type="submit" (click)=" DeleteAdmin(Admin)" class="btn btn-danger">
                                                           <i class="fas fa-trash-alt" style="color: red;"></i>
                                                         </button>

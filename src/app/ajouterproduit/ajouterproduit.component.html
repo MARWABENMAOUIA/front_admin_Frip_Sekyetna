@@ -78,6 +78,7 @@
 
           <div class="row">
             <form [formGroup]="ProduitForm" (ngSubmit)="addNewProduit()">
+
               <div class="col-lg-12">
                 <div class="card">
                   <div class="px-4 py-3 border-bottom">
@@ -93,15 +94,9 @@
                         >Image</label
                       >
                       <div class="col-sm-9">
-                        <input
-                          accept="image/*" (change)="onSelectFile($event)"
-                          formControlName="img"
-                          type="file"
-                          class="form-control"
-                          id="exampleInputtext"
-                          placeholder="image"
-                        />
+                        <input accept="image/*" (change)="onSelectFiles($event)" formControlName="images" type="file" class="form-control" id="exampleInputtext" placeholder="images" multiple />
                       </div>
+                    
                     </div>
                     <div class="mb-4 row align-items-center">
                       <label
@@ -119,25 +114,7 @@
                         />
                       </div>
                     </div>
-                    <div class="mb-4 row align-items-center">
-                      <label
-                        for="exampleInputPassword1"
-                        class="form-label fw-semibold col-sm-3 col-form-label"
-                        >Quantite</label
-                      >
-                      <div class="col-sm-9">
-                        <div class="input-group border rounded-1">
-                          <input
-                            formControlName="quantite"
-                            type="number"
-                            class="form-control border-0"
-                            placeholder="number"
-                          />
-                        
-                          
-                        </div>
-                      </div>
-                    </div>
+                   
                     <div class="mb-4 row align-items-center">
                       <label
                         for="exampleInputPassword1"
@@ -177,9 +154,14 @@
                     <div class="row">
                       <div class="col-sm-3"></div>
                       <div class="col-sm-9">
-                        <BUtton type="submit" class="btn btn-primary"
-                          >Ajouter</BUtton
-                        >
+                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                        <span style="text-align: left;" [innerHTML]="this.messageproduit">
+                          
+
+                        </span>
+                    
+
+
                       </div>
                     </div>
                   </div>

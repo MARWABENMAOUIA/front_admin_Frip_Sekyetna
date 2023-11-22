@@ -1,4 +1,5 @@
 
+
 <!doctype html>
 <html lang="en">
 
@@ -55,7 +56,8 @@
             <!-- --------------------------------------------------- -->
         <!-- Header Start -->
         <!-- --------------------------------------------------- -->
-      <app-header></app-header>
+        <app-header></app-header>
+
         <!-- Header E
         <!-- --------------------------------------------------- -->
         <!-- Header End -->
@@ -66,13 +68,8 @@
             <div class="card-body px-4 py-3">
               <div class="row align-items-center">
                 <div class="col-9">
-                  <h4 class="fw-semibold mb-8">Table Datatable Basic</h4>
-                  <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                      <li class="breadcrumb-item"><a class="text-muted " href="index.html">Dashboard</a></li>
-                      <li class="breadcrumb-item" aria-current="page">Table Datatable Basic</li>
-                    </ol>
-                  </nav>
+                  <h4 class="fw-semibold mb-8">List des contacts</h4>
+               
                 </div>
                 <div class="col-3">
                   <div class="text-center mb-n5">  
@@ -96,7 +93,7 @@
                                 ---------------- -->
                             <div class="card">
                                 <div class="card-body">
-                                   
+                                  <div *ngIf="achats && achats.length > 0">
                                   
                                     <div class="table-responsive">
                                         <table id="zero_config"
@@ -104,40 +101,46 @@
                                             <thead>
                                                 <!-- start row -->
                                                 <tr>
-                                                    <th>ID</th>
-                                                    <th>Nom</th>
-                                                    <th>Prenom</th>
-                                                    <th>Email</th>
-                                                    <th>Adresse</th>
-                                                    <th>Action</th>
+                                                  <th >Nom</th>
+                                                  <th >Prénom</th>
+                                                  <th >Téléphone</th>
+                                                  <th >Adresse</th>
+                                                  <th >Nom produit</th>
+                                                  <th >Prix produit</th>
+                                                  <th >Frais de livraison</th>
+                                                  <th >Total</th>  
+                                                  <th>Supprimer</th>
                                                 </tr>
+
                                                 <!-- end row -->
                                             </thead>
                                             <tbody>
-                                                <!-- start row -->
-                                                <tr *ngFor="let Client of listclient">
-                                                    <td>{{Client.id}}</td>
-                                                    <td>{{Client.nom}}</td>
-                                                    <td>{{Client.prenom}}</td>
-                                                    <td>{{Client.email}}</td>
-
-                                                    <td>{{Client.adresse}}</td>
-                                                    <td>
-                                                        <button type="submit" (click)=" DeleteClient(Client)" class="btn btn-danger">Supprimer</button></td>
+                                              <tbody>
+                                                <tr *ngFor="let achat of achats">
+                                                  <td>{{ achat.nom }}</td>
+                                                  <td>{{ achat.prenom }}</td>
+                                                  <td>{{ achat.tel }}</td>
+                                                  <td>{{ achat.adresse }}</td>
+                                                  <td>{{ achat.produit.nom }}</td>
+                                                  <td>{{ achat.produit.prix }} DT</td>
+                                                  <td>8 DT</td> <!-- Frais de livraison fixe -->
+                                                  <td>{{ achat.produit.prix + 8 }} DT</td> 
+                                                  <td>
+                                                    <button (click)="supprimerAchatParId(achat)" class="btn btn-danger">
+                                                      <i class="fas fa-trash-alt" style="color: red;"></i>
+                                                    </button>
+                                                  </td>
                                                 </tr>
-                                                <!-- end row -->
-                                                <!-- start row -->
-                                     
-                                                <!-- end row -->
+                                              
                                             </tbody>
                                            
                                         </table>
                                     </div>
-                                </div>
+                                  </div>  </div>
                             </div>
-                            <!-- ---------------------
-                                    end Zero Configuration
-                                ---------------- -->
+                            <div *ngIf="!achats || achats.length === 0">
+                              <p>Aucun achat trouvé.</p>
+                            </div>
                         </div>
                     </div>
                     
